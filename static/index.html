@@ -16,6 +16,7 @@
     .users button:hover{background:#f1f5fb}
     .users button .badge{margin-left:auto;background:#ff4d4f;color:white;border-radius:12px;font-size:11px;padding:2px 6px}
     .avatar{width:32px;height:32px;border-radius:6px;background:#eef4ff;color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+    .avatar-img{width:32px;height:32px;border-radius:6px;object-fit:cover;display:inline-block}
 
     .main{flex:1;display:flex;flex-direction:column}
     .header{padding:12px 16px;border-bottom:1px solid #e6e9ef;display:flex;align-items:center;justify-content:space-between;background:var(--card)}
@@ -29,7 +30,7 @@
     .composer input{flex:1;padding:10px;border:1px solid #e6e9ef;border-radius:8px;margin-right:8px;font-size:14px}
     .composer button{background:var(--accent);color:white;border:0;padding:9px 14px;border-radius:8px;font-weight:600}
 
-    .msg{padding:10px;border-radius:12px;margin-bottom:10px;max-width:64%;word-wrap:break-word}
+    .msg{padding:10px;border-radius:12px;margin-bottom:10px;max-width:64%; min-width: 20%;word-wrap:break-word}
     .msg.own{background:var(--own);margin-left:auto;color:#042033}
     .msg.other{background:var(--other);margin-right:auto;color:#042033}
     .msg.system{background:transparent;color:var(--muted);text-align:center;max-width:100%}
@@ -43,16 +44,41 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">HSSChatting</div>
-      <div class="user-info">Du: <strong id="me">-</strong></div>
+      <div class="user-info">Du: <img id="me-avatar" src="" alt="" style="width:20px;height:20px;border-radius:4px;vertical-align:middle;margin-right:8px;display:none;object-fit:cover;" /><strong id="me">-</strong></div>
       <div><strong>Online</strong></div>
       <div class="users" id="users"></div>
       <div style="margin-top:16px;color:var(--muted);font-size:13px">Tipp: Klick auf einen Nutzer, um einen privaten Chat zu öffnen.</div>
 
-      <div class="settings" id="settings" style="border-top:1px solid #e6e9ef;padding-top:12px;margin-top:12px">
-        <div style="font-size:13px;color:var(--muted)">Einstellungen</div>
-        <div style="margin-top:8px">
-          <input id="set-nick" placeholder="Dein Nick" style="width:100%;padding:8px;border:1px solid #e6e9ef;border-radius:6px" />
-          <button id="save-nick" style="margin-top:8px;width:100%;padding:8px;border-radius:6px;background:var(--accent);color:white;border:0">Speichern</button>
+      <!-- Einstellungs-Button unten links -->
+      <button id="settings-btn" style="position:absolute;left:18px;bottom:18px;background:var(--accent);color:white;border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0001;cursor:pointer;font-size:22px;z-index:10;">
+        <span style="pointer-events:none;">&#9881;</span>
+      </button>
+
+      <!-- Popup für Einstellungen -->
+      <div id="settings-popup" style="display:none;position:fixed;left:0;top:0;width:100vw;height:100vh;background:#0005;z-index:1000;align-items:center;justify-content:center;">
+        <div style="background:var(--card);padding:32px 28px 24px 28px;border-radius:18px;box-shadow:0 8px 32px #0002;min-width:320px;max-width:90vw;position:relative;">
+          <button id="close-settings" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;">&times;</button>
+          <div style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:10px;">Einstellungen</div>
+          <div style="margin-bottom:10px;display:flex;gap:12px;align-items:center;">
+            <div style="flex:0 0 72px;text-align:center">
+              <img id="avatar-preview" src="" alt="Vorschau" style="width:64px;height:64px;border-radius:10px;object-fit:cover;background:#eef4ff;display:none;border:1px solid #e6e9ef" />
+            </div>
+            <div style="flex:1">
+              <label for="avatar-file" style="display:block;font-size:13px;color:var(--muted);margin-bottom:6px">Profilbild</label>
+              <input id="avatar-file" type="file" accept="image/*" style="width:100%;" />
+              <div style="margin-top:8px;display:flex;gap:8px;">
+                <button id="upload-avatar" style="flex:1;padding:8px;border-radius:8px;background:#2b7de9;color:white;border:0;display:none">Hochladen</button>
+                <button id="remove-avatar" style="flex:1;padding:8px;border-radius:8px;background:#f3f4f6;color:#333;border:0;display:none">Entfernen</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;font-size:13px;color:var(--muted)">Passe deinen Nicknamen an:</div>
+          <div style="position:relative;margin-bottom:12px;">
+            <input id="set-nick" maxlength="32" placeholder="Dein Nickname (max. 32 Zeichen)" style="width:100%;padding:12px 40px 12px 14px;border:1.5px solid #b6c6e0;border-radius:10px;font-size:16px;outline:none;transition:border 0.2s;box-sizing:border-box;background:#f7faff;" />
+            <span id="nick-clear" title="Leeren" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:18px;color:#b6c6e0;cursor:pointer;user-select:none;display:none;">&times;</span>
+          </div>
+          <button id="save-nick" style="width:100%;padding:10px 0;border-radius:8px;background:var(--accent);color:white;border:0;font-size:15px;font-weight:600">Speichern</button>
         </div>
       </div>
     </aside>
@@ -94,7 +120,25 @@
 
   const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws');
 
-  const messages = { all: [] }; // messages['all'] and messages['username']
+  const messages = { all: [] }; // messages['all'] and messages['id']
+
+  const avatars = {}; // id -> avatar url
+  const users = {};   // id -> username
+  let myId = null;
+  const avatarFile = document.getElementById('avatar-file');
+  const avatarPreview = document.getElementById('avatar-preview');
+  const uploadAvatarBtn = document.getElementById('upload-avatar');
+  const removeAvatarBtn = document.getElementById('remove-avatar');
+  const meAvatarImg = document.getElementById('me-avatar');
+
+  // load cached avatar (fallback)
+  const cachedAvatar = localStorage.getItem('hss_avatar');
+  if(cachedAvatar){ setMeAvatar(cachedAvatar); }
+
+  function setMeAvatar(url){
+    if(url){ meAvatarImg.src = url; meAvatarImg.style.display = 'inline-block'; }
+    else { meAvatarImg.src = ''; meAvatarImg.style.display = 'none'; }
+  }
 
   function formatTime(ts){ try{ const d = new Date(ts); return d.toLocaleTimeString(); }catch(e){ return ''; } }
 
@@ -110,11 +154,16 @@
         el.appendChild(meta);
         const body = document.createElement('div'); body.textContent = m.text; el.appendChild(body);
       } else {
-        const isOwn = (m.user === myName);
+        const isOwn = (m.user_id === myId);
         el.className = 'msg ' + (isOwn ? 'own' : 'other');
         const meta = document.createElement('div'); meta.className = 'meta';
         const who = document.createElement('div'); who.className='who'; who.textContent = isOwn ? (m.user + ' (du)') : m.user;
         const right = document.createElement('div'); right.className='time'; right.textContent = formatTime(m.ts);
+        // show small avatar in message meta if available (by id)
+        const avatarUrl = avatars[m.user_id];
+        if(avatarUrl){
+          const aimg = document.createElement('img'); aimg.className='avatar-img'; aimg.src = avatarUrl; aimg.style.width='24px'; aimg.style.height='24px'; aimg.style.marginRight='8px'; aimg.style.verticalAlign='middle'; meta.appendChild(aimg);
+        }
         meta.appendChild(who); meta.appendChild(right);
         if(m.private){
           const pb = document.createElement('span'); pb.className='private-badge'; pb.textContent='Privat'; meta.appendChild(pb);
@@ -126,7 +175,7 @@
       messagesDiv.appendChild(el);
     });
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    const title = channel === 'all' ? 'Hauptchat' : `Privat: ${channel}`;
+    const title = channel === 'all' ? 'Hauptchat' : `Privat: ${users[channel] || channel}`;
     channelLabel.textContent = title;
     // update active channel button
     Array.from(document.querySelectorAll('.channel-btn')).forEach(b=>{
@@ -151,19 +200,38 @@
       const data = JSON.parse(ev.data);
       if(data.type === 'message'){
         if(data.private){
-          // private: determine channel (other user)
-          const other = (data.user === myName) ? data.to : data.user;
+          // private: determine other id (channel key by id)
+          const other = (data.user_id === myId) ? data.to : data.user_id;
           addMessageTo(other, data);
-          // find or create a sidebar user button and show unread there
-          let userBtn = Array.from(usersDiv.querySelectorAll('button')).find(b => b.textContent && b.textContent.trim() === other);
+          // find or create a sidebar user button by id and show unread there
+          let userBtn = Array.from(usersDiv.querySelectorAll('button')).find(b => b.dataset && b.dataset.id === other);
+          const otherName = data.to_user || data.user || users[other] || other;
           if(!userBtn){
             userBtn = document.createElement('button');
-            const av = document.createElement('div'); av.className='avatar'; av.textContent = other.slice(0,2).toUpperCase();
-            userBtn.appendChild(av);
-            const txt = document.createElement('div'); txt.textContent = other; userBtn.appendChild(txt);
+            userBtn.dataset.id = other;
+            const avatarUrl = avatars[other];
+            if(avatarUrl){
+              const img = document.createElement('img'); img.className='avatar-img'; img.src = avatarUrl; userBtn.appendChild(img);
+            } else {
+              const av = document.createElement('div'); av.className='avatar'; av.textContent = (otherName||'').slice(0,2).toUpperCase(); userBtn.appendChild(av);
+            }
+            const txt = document.createElement('div'); txt.textContent = otherName; userBtn.appendChild(txt);
             const b = document.createElement('span'); b.className='badge'; userBtn.appendChild(b);
             userBtn.addEventListener('click', ()=>{ currentChannel = other; renderChannel(currentChannel); ws.send(JSON.stringify({type:'history', channel:other})); const bb = userBtn.querySelector('.badge'); if(bb) bb.remove(); userBtn.dataset.unread = 0; });
             usersDiv.appendChild(userBtn);
+          } else {
+            // if existing, maybe update avatar if available
+            const avatarUrl = avatars[other];
+            const existingImg = userBtn.querySelector('img.avatar-img');
+            if(avatarUrl && !existingImg){
+              const avDiv = userBtn.querySelector('.avatar'); if(avDiv) avDiv.remove();
+              const img = document.createElement('img'); img.className='avatar-img'; img.src = avatarUrl; userBtn.insertBefore(img, userBtn.firstChild);
+            } else if(!avatarUrl && existingImg){
+              existingImg.remove();
+              const avDiv = document.createElement('div'); avDiv.className='avatar'; avDiv.textContent = (otherName||'').slice(0,2).toUpperCase(); userBtn.insertBefore(avDiv, userBtn.firstChild);
+            } else if(avatarUrl && existingImg){ existingImg.src = avatarUrl; }
+            // also ensure label is up to date
+            const label = userBtn.querySelector('div'); if(label) label.textContent = otherName;
           }
           // if not currently viewing that channel, show unread badge
           if(currentChannel !== other){
@@ -178,30 +246,56 @@
           if(currentChannel === 'all') renderChannel('all');
         }
       } else if(data.type === 'user_list'){
-        // update users list
+        // update users list (array of objects {id, user, avatar})
         usersDiv.innerHTML = '';
-        data.users.forEach(u=>{
-          const existing = Array.from(usersDiv.querySelectorAll('button')).find(b => b.textContent && b.textContent.trim() === u);
-          if(existing) return; // avoid duplicates
-          const btn = document.createElement('button');
-          const av = document.createElement('div'); av.className='avatar'; av.textContent = u.slice(0,2).toUpperCase();
-          btn.appendChild(av);
+        data.users.forEach(item=>{
+          const id = item.id;
+          const u = item.user || '';
+          const avatar = item.avatar || null;
+          // store in maps
+          users[id] = u;
+          avatars[id] = avatar;
+          // skip showing self in the list
+          if(id === myId) {
+            if(avatar){ setMeAvatar(avatar); localStorage.setItem('hss_avatar', avatar); }
+            return;
+          }
+
+          const existing = Array.from(usersDiv.querySelectorAll('button')).find(b => b.dataset && b.dataset.id === id);
+          if(existing){
+            // update avatar if changed
+            const existingImg = existing.querySelector('img.avatar-img');
+            if(avatar && !existingImg){ const avDiv = existing.querySelector('.avatar'); if(avDiv) avDiv.remove(); const img = document.createElement('img'); img.className='avatar-img'; img.src = avatar; existing.insertBefore(img, existing.firstChild); }
+            else if(!avatar && existingImg){ existingImg.remove(); const avDiv = document.createElement('div'); avDiv.className='avatar'; avDiv.textContent = u.slice(0,2).toUpperCase(); existing.insertBefore(avDiv, existing.firstChild); }
+            else if(avatar && existingImg){ existingImg.src = avatar; }
+            return;
+          }
+
+          const btn = document.createElement('button'); btn.dataset.id = id;
+          if(avatar){ const img = document.createElement('img'); img.className='avatar-img'; img.src = avatar; btn.appendChild(img); }
+          else { const av = document.createElement('div'); av.className='avatar'; av.textContent = u.slice(0,2).toUpperCase(); btn.appendChild(av); }
           const txt = document.createElement('div'); txt.textContent = u; btn.appendChild(txt);
           const badge = document.createElement('span'); badge.className='badge'; badge.style.display='none'; btn.appendChild(badge);
           btn.addEventListener('click', ()=>{ 
-            currentChannel = u; 
+            currentChannel = id; 
             renderChannel(currentChannel);
-            // request DM history from server
-            ws.send(JSON.stringify({type:'history', channel:u}));
+            // request DM history from server (channel by id)
+            ws.send(JSON.stringify({type:'history', channel:id}));
             // clear unread badge on this user
             badge.remove(); btn.dataset.unread = 0; 
           });
           usersDiv.appendChild(btn);
         });
       } else if(data.type === 'joined'){
-        myName = data.user; meSpan.textContent = myName; localStorage.setItem('hss_nick', myName); addMessageTo('all', {user:'_system', text:`Dein Nick ist jetzt: ${myName}`, ts:data.ts||new Date().toISOString()}); renderChannel(currentChannel);
+        myName = data.user; myId = data.id; meSpan.textContent = myName; localStorage.setItem('hss_nick', myName); addMessageTo('all', {user:'_system', text:`Dein Nick ist jetzt: ${myName}`, ts:data.ts||new Date().toISOString()});
+        // set avatar if present
+        const av = avatars[myId] || localStorage.getItem('hss_avatar'); if(av){ setMeAvatar(av); }
+        renderChannel(currentChannel);
       } else if(data.type === 'renamed'){
-        myName = data.user; meSpan.textContent = myName; localStorage.setItem('hss_nick', myName); addMessageTo('all', {user:'_system', text:`${data.old} heißt jetzt ${data.user}`, ts:data.ts||new Date().toISOString()}); renderChannel(currentChannel);
+        // rename applies to the current client
+        myName = data.user; meSpan.textContent = myName; localStorage.setItem('hss_nick', myName); addMessageTo('all', {user:'_system', text:`${data.old} heißt jetzt ${data.user}`, ts:data.ts||new Date().toISOString()});
+        const av2 = avatars[myId] || localStorage.getItem('hss_avatar'); if(av2){ setMeAvatar(av2); }
+        renderChannel(currentChannel);
       } else if(data.type === 'history'){
         const ch = data.channel || 'all';
         messages[ch] = data.messages || [];
@@ -210,22 +304,107 @@
     }catch(e){ console.error(e); }
   });
 
-  // settings elements
+
+  // Settings Popup
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsPopup = document.getElementById('settings-popup');
+  const closeSettings = document.getElementById('close-settings');
   const nickInput = document.getElementById('set-nick');
   const saveNickBtn = document.getElementById('save-nick');
-  if(nickInput) nickInput.value = localStorage.getItem('hss_nick') || nick;
+
+  // Verbesserte Nickname-Input-UX
+  const nickClear = document.getElementById('nick-clear');
+  function updateClearBtn() {
+    if(nickInput.value.length > 0) {
+      nickClear.style.display = '';
+    } else {
+      nickClear.style.display = 'none';
+    }
+  }
+  nickInput.addEventListener('input', updateClearBtn);
+  nickClear.addEventListener('click', ()=>{ nickInput.value = ''; updateClearBtn(); nickInput.focus(); });
+  function openSettings() {
+    settingsPopup.style.display = 'flex';
+    nickInput.value = localStorage.getItem('hss_nick') || nick;
+    updateClearBtn();
+    setTimeout(()=>{nickInput.focus();}, 100);
+  }
+  function closeSettingsPopup() {
+    settingsPopup.style.display = 'none';
+  }
+  settingsBtn.addEventListener('click', openSettings);
+  closeSettings.addEventListener('click', closeSettingsPopup);
+  settingsPopup.addEventListener('click', (e)=>{ if(e.target === settingsPopup) closeSettingsPopup(); });
 
   saveNickBtn.addEventListener('click', ()=>{
-    const newNick = (nickInput.value || '').trim(); if(!newNick) return; ws.send(JSON.stringify({type:'rename', user:newNick}));
+    const newNick = (nickInput.value || '').trim(); if(!newNick) return;
+    ws.send(JSON.stringify({type:'rename', user:newNick}));
+    closeSettingsPopup();
+  });
+  nickInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') saveNickBtn.click(); });
+
+  // Avatar upload handlers
+  avatarFile.addEventListener('change', (e)=>{
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+    if(f.size > 2*1024*1024){ alert('Datei zu groß (max. 2 MB)'); avatarFile.value = ''; return; }
+    const url = URL.createObjectURL(f);
+    avatarPreview.src = url; avatarPreview.style.display = 'block';
+    uploadAvatarBtn.style.display = ''; removeAvatarBtn.style.display = '';
   });
 
-  // send message
-  sendBtn.addEventListener('click', ()=>{
-    const text = msgInput.value.trim(); if(!text) return;
-    const to = currentChannel || 'all';
-    ws.send(JSON.stringify({type:'message', text, to}));
-    msgInput.value = '';
+  uploadAvatarBtn.addEventListener('click', async ()=>{
+    const f = avatarFile.files && avatarFile.files[0];
+    if(!f){ alert('Wähle zuerst eine Datei aus'); return; }
+    if(!myName){ alert('Bitte verbinde dich zuerst'); return; }
+    uploadAvatarBtn.disabled = true; uploadAvatarBtn.textContent = 'Hochladen...';
+    try{
+      const fd = new FormData(); fd.append('file', f);
+      const res = await fetch('/upload-avatar', { method: 'POST', body: fd });
+      const text = await res.text();
+      if(!res.ok){
+        try{ const j = JSON.parse(text); alert(j.detail || j.message || 'Upload fehlgeschlagen'); }
+        catch(e){ alert('Upload fehlgeschlagen: ' + text); }
+        return;
+      }
+      const j = JSON.parse(text);
+      avatars[myName] = j.url; localStorage.setItem('hss_avatar', j.url); setMeAvatar(j.url);
+      avatarPreview.src = j.url; avatarPreview.style.display = 'block';
+      uploadAvatarBtn.style.display = 'none'; removeAvatarBtn.style.display = '';
+      avatarFile.value = '';
+    }catch(e){ alert('Upload fehlgeschlagen: ' + (e && e.message ? e.message : String(e))); }
+    uploadAvatarBtn.disabled = false; uploadAvatarBtn.textContent = 'Hochladen';
   });
+
+  removeAvatarBtn.addEventListener('click', async ()=>{
+    if(!myName) return;
+    try{
+      const fd = new FormData();
+      const res = await fetch('/remove-avatar', { method: 'POST', body: fd });
+      const text = await res.text();
+      if(!res.ok){ try{ const j = JSON.parse(text); alert(j.detail || j.message || 'Entfernen fehlgeschlagen'); }catch(e){ alert('Entfernen fehlgeschlagen: '+text); } return; }
+      avatars[myName] = null; localStorage.removeItem('hss_avatar'); setMeAvatar(null); avatarPreview.src = ''; avatarPreview.style.display='none'; uploadAvatarBtn.style.display='none'; removeAvatarBtn.style.display='none';
+    }catch(e){ alert('Entfernen fehlgeschlagen'); }
+  });
+
+  // ensure preview shows stored avatar when opening settings
+  const prevOpenSettings = openSettings;
+  openSettings = function(){
+    prevOpenSettings();
+    const av = avatars[myName] || localStorage.getItem('hss_avatar');
+    if(av){ avatarPreview.src = av; avatarPreview.style.display='block'; removeAvatarBtn.style.display=''; uploadAvatarBtn.style.display='none'; }
+    else { avatarPreview.src = ''; avatarPreview.style.display='none'; removeAvatarBtn.style.display='none'; uploadAvatarBtn.style.display='none'; }
+  };
+
+  // send message
+
+    sendBtn.addEventListener('click', ()=>{
+      const text = msgInput.value.trim(); if(!text) return;
+      const to = currentChannel || 'all';
+      if(to !== 'all' && to === myId) return; // nicht an sich selbst senden
+      ws.send(JSON.stringify({type:'message', text, to}));
+      msgInput.value = '';
+    });
 
   msgInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') sendBtn.click(); });
 
