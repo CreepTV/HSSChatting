@@ -60,13 +60,16 @@ class ConnectionManager:
         return uid
 
     async def set_username(self, websocket: WebSocket, desired: str) -> str:
-        """Set username for the id associated with websocket, ensure uniqueness among active names."""
+        """Set username for the id associated with websocket, ensure uniqueness among active names.
+
+        If the same id already had this name, keep it (don't append suffix on reconnect).
+        """
         async with self.lock:
             uid = self.active.get(websocket, '')
             base = (desired or "Gast")[:32]
             name = base
-            # existing names (excluding empty)
-            existing = set([n for n in self.id_to_name.values() if n])
+            # existing names for other ids (excluding this uid)
+            existing = set([n for k,n in self.id_to_name.items() if n and k != uid])
             i = 1
             while name in existing and name != "":
                 i += 1
