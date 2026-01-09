@@ -199,11 +199,29 @@ async def upload_avatar(file: UploadFile = File(...), request: Request = None):
     safe = re.sub(r'[^A-Za-z0-9_-]', '_', uid)[:40] or uuid4().hex[:8]
     filename = f"{safe}_{uuid4().hex}{suffix}"
     out_path = Path('static/avatars') / filename
+
+    # write new avatar file
     with open(out_path, 'wb') as f:
         f.write(data)
 
     url = f"/static/avatars/{filename}"
+
+    # remember previous avatar so we can remove it after successful write
+    prev = manager.avatars.get(uid)
+
     await manager.set_avatar(uid, url)
+
+    # remove previous avatar file to avoid orphaned files (only if it's different)
+    if prev and prev.startswith('/static/avatars/'):
+        try:
+            prev_fname = prev.split('/')[-1]
+            if prev_fname != filename:
+                prev_path = Path('static/avatars') / prev_fname
+                if prev_path.exists():
+                    prev_path.unlink()
+        except Exception:
+            pass
+
     users = await manager.user_list()
     await manager.broadcast({"type":"user_list","users":users})
     return {"url": url}

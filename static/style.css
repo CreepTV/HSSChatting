@@ -1,0 +1,422 @@
+:root {
+    --bg: #0b1220;
+    /* page background */
+    --card: #0f1724;
+    /* sidebar / panels */
+    --accent: #2b7de9;
+    /* blue accent */
+    --muted: #9aa6b2;
+    /* secondary text */
+    --text: #e6eef6;
+    /* main text */
+    --own: #15324a;
+    /* own message background */
+    --other: #0e1720;
+    /* other message background */
+    --avatar-bg: #0f2438;
+    --badge-bg: #ff4d4f;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, Segoe UI, Helvetica, Arial;
+    background: var(--bg);
+    color: var(--text)
+}
+
+.app {
+    display: flex;
+    height: 100vh
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background: var(--card);
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 18px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-size: 18px
+}
+
+.brand-logo {
+    height: 65px;
+    max-width: 100%;
+    object-fit: contain
+}
+
+.user-info {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px
+}
+
+.users {
+    margin-top: 8px;
+    overflow: auto;
+    flex: 1
+}
+
+.users button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    color: var(--text)
+}
+
+.users button:hover {
+    background: rgba(255, 255, 255, 0.02)
+}
+
+.users button .badge {
+    margin-left: auto;
+    background: var(--badge-bg);
+    color: white;
+    border-radius: 12px;
+    font-size: 11px;
+    padding: 2px 6px
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--avatar-bg);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700
+}
+
+.avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: inline-block
+}
+
+.tip {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+/* Header and channels */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column
+}
+
+.header {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card)
+}
+
+.channels {
+    display: flex;
+    gap: 8px
+}
+
+.channel-btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    color: var(--text)
+}
+
+.channel-btn.active {
+    background: var(--accent);
+    color: white
+}
+
+.channel-btn .badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--badge-bg);
+    color: white;
+    border-radius: 100%;
+    font-size: 10px;
+    padding: 2px 6px
+}
+
+#channel-label {
+    color: var(--muted)
+}
+
+/* Chat area */
+.chat-area {
+    flex: 1;
+    padding: 16px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg)
+}
+
+.messages {
+    flex: 1;
+    overflow: auto;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column
+}
+
+.composer {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--card);
+    align-items: center
+}
+
+.composer input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    margin-right: 8px;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text)
+}
+
+.composer button {
+    background: var(--accent);
+    color: white;
+    border: 0;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-weight: 600
+}
+
+/* Messages */
+.msg {
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    max-width: 64%;
+    min-width: 20%;
+    word-wrap: break-word
+}
+
+.msg.own {
+    background: var(--own);
+    margin-left: auto;
+    color: var(--text)
+}
+
+.msg.other {
+    background: var(--other);
+    margin-right: auto;
+    color: var(--text)
+}
+
+.msg.system {
+    background: transparent;
+    color: var(--muted);
+    text-align: center;
+    max-width: 100%
+}
+
+.msg .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px
+}
+
+.msg .meta .who {
+    font-weight: 700;
+    color: var(--text)
+}
+
+.msg .meta .time {
+    font-size: 11px
+}
+
+.private-badge {
+    font-size: 11px;
+    background: #6b4a00;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 8px;
+    color: #ffdca8
+}
+
+/* small utility styles moved from inline attributes */
+#me-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin-right: 8px;
+    display: none;
+    object-fit: cover
+}
+
+#settings-btn{position:absolute;left:18px;bottom:18px;background:var(--accent);color:white;border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.5);cursor:pointer;font-size:22px;z-index:10}
+.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+#settings-popup{display:none;position:fixed;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center}
+#settings-popup.open{display:flex}
+
+#settings-popup .settings-dialog{background:var(--card);padding:28px;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.6);min-width:320px;max-width:520px;position:relative;transform:translateY(-6px);opacity:0;transition:transform 180ms ease, opacity 180ms ease}
+#settings-popup.open .settings-dialog{transform:none;opacity:1}
+
+#close-settings{position:absolute;top:12px;right:12px;background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer}
+
+#avatar-preview {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--avatar-bg);
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.03)
+}
+
+.avatar-col {
+    text-align: center;
+    flex: 0 0 72px
+}
+
+.controls-col {
+    flex: 1
+}
+
+.avatar-label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px
+}
+
+.avatar-buttons {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px
+}
+
+#avatar-file {
+    width: 100%
+}
+
+#upload-avatar {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    border: 0;
+    display: none
+}
+
+#remove-avatar {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    display: none
+}
+
+.settings-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px
+}
+
+.settings-row {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.settings-desc {
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--muted)
+}
+
+.settings-icon {
+    pointer-events: none
+}
+
+#nick-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    display: none
+}
+
+#save-nick {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    border: 0;
+    font-size: 15px;
+    font-weight: 600
+}
+
+/* small layout fixes */
+.users button div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.messages img.avatar-img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle
+}
+
+.badge.hidden {
+    display: none
+}
